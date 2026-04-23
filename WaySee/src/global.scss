@@ -38,9 +38,22 @@
 
 ion-toolbar {
     --min-height: 70px;
+    --background: #83E509;
   }
 
 ion-title {
     --color: white;
     font-size: 20pt;
+    font-family: 'Arial';
+}
+
+.logo {
+  width: 50x;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+ion-content {
+  --background: #F2FFE3;
 }

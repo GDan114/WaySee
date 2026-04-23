@@ -1,11 +1,11 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="success">
+  <ion-toolbar>
     <ion-title class="titulo">
       WaySee
     </ion-title>
     <ion-buttons slot="end">
       <ion-button [routerLink]="['/home']">
-        <ion-icon name="navigate-outline" size="large"></ion-icon>
+        <img src="assets/icon/logo-waysee-clara.jpg" class="logo">
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -14,18 +14,17 @@
 <ion-content [fullscreen]="true">
   <div id="container">
     <div class="button-column">
-
       <ion-button class="round-btn" fill="solid">
         <div class="btn-content">
-          <ion-icon name="navigate-outline"></ion-icon>
-          <span>Rota</span>
+          <ion-icon src="assets/icon/home-semaforo.svg"></ion-icon>
+          <span>Verificar semáforo</span>
         </div>
       </ion-button>
   
       <ion-button class="round-btn" fill="solid">
         <div class="btn-content">
-          <ion-icon name="map-outline"></ion-icon>
-          <span>Mapa</span>
+          <ion-icon src="assets/icon/home-pin.svg"></ion-icon>
+          <span>Traçar rota</span>
         </div>
       </ion-button>
   

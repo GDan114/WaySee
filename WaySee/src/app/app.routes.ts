@@ -10,4 +10,9 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  {
+    path: 'rota-gps',
+    loadComponent: () => import('./rota-gps/rota-gps.page').then( m => m.RotaGpsPage)
+  },
+
 ];

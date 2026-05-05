@@ -12,9 +12,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">rota-gps</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-item>
+    <ion-input
+      placeholder="Digite o endereço"
+      [(ngModel)]="endereco">
+    </ion-input>
+  </ion-item>
+
+  <ion-button expand="full" (click)="abrirRota()">
+    Abrir rota Google-Maps
+  </ion-button>
 </ion-content>

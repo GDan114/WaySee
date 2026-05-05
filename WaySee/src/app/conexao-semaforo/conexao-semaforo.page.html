@@ -1,8 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="titulo">
-      WaySee
-    </ion-title>
+    <ion-title class="titulo">WaySee</ion-title>
     <ion-buttons slot="end">
       <ion-button [routerLink]="['/home']">
         <img src="assets/icon/logo-waysee-clara.jpg" class="logo">
@@ -14,7 +12,15 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">conexao-semaforo</ion-title>
+      <ion-title size="large">Conexão Semáforo</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  
+  <div class="container-aviso">
+    <div class="cartao-verde">
+      <h2>Estabelecendo<br>conexão...</h2>
+      <p>Certifique-se de estar<br>próximo do semáforo!</p>
+    </div>
+  </div>
 </ion-content>

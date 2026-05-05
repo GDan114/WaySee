@@ -1,8 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="titulo">
-      WaySee
-    </ion-title>
+    <ion-title class="titulo">WaySee</ion-title>
     <ion-buttons slot="end">
       <ion-button [routerLink]="['/home']">
         <img src="assets/icon/logo-waysee-clara.jpg" class="logo">
@@ -12,9 +10,23 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">erro-conexao</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="container-aviso">
+    <div class="cartao-verde">
+      <p>
+        Não foi possível se<br>
+        conectar ao semáforo,<br>
+        retorne para a home<br>
+        apertando o botão no<br>
+        canto inferior da tela e<br>
+        tente novamente.
+      </p>
+    </div>
+  </div>
+
+  <div class="container-botao">
+    <button class="botao-home-circular" [routerLink]="['/home']">
+      <ion-icon name="home-outline"></ion-icon>
+      <span>Home</span>
+    </button>
+  </div>
 </ion-content>

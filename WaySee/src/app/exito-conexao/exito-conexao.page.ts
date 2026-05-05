@@ -5,7 +5,8 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, Ion
 import { RouterModule, ActivatedRoute } from '@angular/router';
 
 import { addIcons } from 'ionicons';
-import { home, locationOutline, arrowForwardOutline } from 'ionicons/icons';
+// Removido o arrowForwardOutline daqui
+import { home, locationOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-exito-conexao',
@@ -19,7 +20,8 @@ export class ExitoConexaoPage implements OnInit {
   corAtual: string = 'vermelho'; 
 
   constructor(private route: ActivatedRoute) {
-    addIcons({ home, locationOutline, arrowForwardOutline });
+    // Removido o arrowForwardOutline daqui também
+    addIcons({ home, locationOutline });
   }
 
   ngOnInit() {

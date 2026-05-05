@@ -31,22 +31,20 @@ ion-content {
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-// Luzes apagadas (cinza)
 .luz {
   width: 20px;
   height: 20px;
   border-radius: 50%;
   background-color: #e0e0e0; 
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-  transition: all 0.3s ease; // Efeito suave ao acender
+  transition: all 0.3s ease; 
 }
 
-// Luzes acesas
 .luz.vermelha.ativa { background-color: #ff0000; box-shadow: 0 0 12px #ff0000; }
 .luz.amarela.ativa { background-color: #ffcc00; box-shadow: 0 0 12px #ffcc00; }
 .luz.verde.ativa { background-color: #00cc00; box-shadow: 0 0 12px #00cc00; }
 
-// --- TEXTOS E BOTÕES ---
+// --- TEXTOS E BOTÃO HOME ---
 .cartao-verde {
   background-color: #a3e635;
   border-radius: 20px;
@@ -64,29 +62,6 @@ ion-content {
   }
 }
 
-.container-seta {
-  width: 100%;
-  max-width: 350px;
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
-  margin-bottom: 40px;
-}
-
-.botao-seta {
-  background-color: #4a5c2f; 
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  cursor: pointer;
-}
-
 .botao-home-circular {
   background-color: #a3e635;
   border: none;
@@ -99,6 +74,7 @@ ion-content {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-top: 60px; // Adicionado para manter a distância do cartão de texto
 
   ion-icon {
     color: white;

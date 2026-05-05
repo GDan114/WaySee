@@ -1,8 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="titulo">
-      WaySee
-    </ion-title>
+    <ion-title class="titulo">WaySee</ion-title>
     <ion-buttons slot="end">
       <ion-button [routerLink]="['/home']">
         <img src="assets/icon/logo-waysee-clara.jpg" class="logo">
@@ -28,13 +26,7 @@
       <p *ngIf="corAtual === 'vermelho'">Sinal vermelho, prossiga<br>com cautela!</p>
     </div>
 
-    <div class="container-seta" *ngIf="corAtual !== 'vermelho'">
-      <button class="botao-seta">
-        <ion-icon name="arrow-forward-outline"></ion-icon>
-      </button>
-    </div>
-
-    <button class="botao-home-circular" [routerLink]="['/home']" [style.marginTop]="corAtual === 'vermelho' ? '60px' : '0'">
+    <button class="botao-home-circular" [routerLink]="['/home']">
       <ion-icon name="home"></ion-icon>
       <span>Home</span>
     </button>

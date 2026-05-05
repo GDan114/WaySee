@@ -2,20 +2,33 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon } from '@ionic/angular/standalone';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
+
+import { addIcons } from 'ionicons';
+import { home, locationOutline, arrowForwardOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-exito-conexao',
   templateUrl: './exito-conexao.page.html',
   styleUrls: ['./exito-conexao.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon, RouterModule]
+  imports: [CommonModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon, RouterModule]
 })
 export class ExitoConexaoPage implements OnInit {
+  
+  corAtual: string = 'vermelho'; 
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) {
+    addIcons({ home, locationOutline, arrowForwardOutline });
+  }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['cor']) {
+        this.corAtual = params['cor'];
+        console.log('A cor recebida do semáforo foi:', this.corAtual);
+      }
+    });
   }
 
 }

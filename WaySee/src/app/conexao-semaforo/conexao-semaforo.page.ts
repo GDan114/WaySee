@@ -28,11 +28,17 @@ export class ConexaoSemaforoPage implements OnInit {
   tentarConectarSemaforo() {
     console.log('Buscando semáforo na rede...');
 
-    this.http.get(this.urlDoEsp, { observe: 'response' }).subscribe({
+    // Lê diretamente o JSON enviado pelo ESP32 usando <any>
+    this.http.get<any>(this.urlDoEsp).subscribe({
       next: (resposta) => {
-        if (resposta.status === 200) {
-          console.log('Semáforo encontrado e respondendo!');
-          this.router.navigate(['/exito-conexao']); 
+        // Verifica se o JSON tem o status "conectado" que o ESP32 enviou
+        if (resposta.status === 'conectado') {
+          console.log('Semáforo encontrado! Cor enviada:', resposta.cor);
+          
+          // Vai para a tela de êxito levando a cor como "bagagem" (query param)
+          this.router.navigate(['/exito-conexao'], { 
+            queryParams: { cor: resposta.cor } 
+          }); 
         }
       },
       error: (erro) => {

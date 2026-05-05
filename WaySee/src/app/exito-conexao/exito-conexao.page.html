@@ -12,9 +12,32 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">exito-conexao</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="container-principal">
+    
+    <div class="fundo-redondo-semaforo">
+      <div class="corpo-semaforo">
+        <div class="luz vermelha" [class.ativa]="corAtual === 'vermelho'"></div> 
+        <div class="luz amarela" [class.ativa]="corAtual === 'amarelo'"></div>
+        <div class="luz verde" [class.ativa]="corAtual === 'verde'"></div>
+      </div>
+    </div>
+
+    <div class="cartao-verde">
+      <p *ngIf="corAtual === 'verde'">Sinal verde, não prossiga!</p>
+      <p *ngIf="corAtual === 'amarelo'">Sinal amarelo, não prossiga!</p>
+      <p *ngIf="corAtual === 'vermelho'">Sinal vermelho, prossiga<br>com cautela!</p>
+    </div>
+
+    <div class="container-seta" *ngIf="corAtual !== 'vermelho'">
+      <button class="botao-seta">
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </button>
+    </div>
+
+    <button class="botao-home-circular" [routerLink]="['/home']" [style.marginTop]="corAtual === 'vermelho' ? '60px' : '0'">
+      <ion-icon name="home"></ion-icon>
+      <span>Home</span>
+    </button>
+
+  </div>
 </ion-content>

@@ -13,17 +13,28 @@
   <div class="container-principal">
     
     <div class="fundo-redondo-semaforo">
-      <div class="corpo-semaforo">
-        <div class="luz vermelha" [class.ativa]="corAtual === 'vermelho'"></div> 
-        <div class="luz amarela" [class.ativa]="corAtual === 'amarelo'"></div>
-        <div class="luz verde" [class.ativa]="corAtual === 'verde'"></div>
+      <div class="corpo-semaforo-pedestre">
+        
+        <div class="modulo-pedestre vermelho" [class.apagado]="corAtual !== 'vermelho'">
+          <svg width="40" height="60" viewBox="0 0 40 60" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="8" r="7" fill="currentColor"/>
+            <path d="M12 18h16a2 2 0 0 1 2 2v20a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2V28h-2v12a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2V28h-2v12a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2V20a2 2 0 0 1 2-2z" fill="currentColor"/>
+          </svg>
+        </div> 
+
+        <div class="modulo-pedestre verde" [class.apagado]="corAtual !== 'verde'">
+          <svg width="40" height="60" viewBox="0 0 40 60" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="8" r="7" fill="currentColor"/>
+            <path d="M15 18l10 5s2 1 2 4v10s0 2-2 2h-4v10s0 2-2 2h-1a2 2 0 0 1-2-2v-12l10-5s-1-4-4-5l-10 10s-1 1-2 1h-2a2 2 0 0 1-2-2V20s0-2 2-2z" fill="currentColor"/>
+          </svg>
+        </div>
+        
       </div>
     </div>
 
     <div class="cartao-verde">
-      <p *ngIf="corAtual === 'verde'">Sinal verde, não prossiga!</p>
-      <p *ngIf="corAtual === 'amarelo'">Sinal amarelo, não prossiga!</p>
-      <p *ngIf="corAtual === 'vermelho'">Sinal vermelho, prossiga<br>com cautela!</p>
+      <p *ngIf="corAtual === 'vermelho'">Sinal vermelho,<br>não prossiga!</p>
+      <p *ngIf="corAtual === 'verde'">Sinal verde, prossiga<br>com cautela!</p>
     </div>
 
     <button class="botao-home-circular" [routerLink]="['/home']">

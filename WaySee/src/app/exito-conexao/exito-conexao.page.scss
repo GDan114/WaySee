@@ -9,10 +9,10 @@ ion-content {
   padding: 40px 20px 0;
 }
 
-// --- DESENHO DO SEMÁFORO ---
+// --- DESENHO DO SEMÁFORO DE PEDESTRES (SVG INLINE) ---
 .fundo-redondo-semaforo {
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
   background-color: #a3e635;
   border-radius: 50%;
   display: flex;
@@ -21,30 +21,49 @@ ion-content {
   margin-bottom: 30px;
 }
 
-.corpo-semaforo {
+.corpo-semaforo-pedestre {
   background-color: white;
-  border-radius: 20px;
-  padding: 15px 12px;
+  border-radius: 15px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.luz {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #e0e0e0; 
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-  transition: all 0.3s ease; 
+.modulo-pedestre {
+  width: 60px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+
+  svg {
+    // Garante que o SVG preencha o módulo mantendo a proporção
+    width: 80%;
+    height: 80%;
+  }
 }
 
-.luz.vermelha.ativa { background-color: #ff0000; box-shadow: 0 0 12px #ff0000; }
-.luz.amarela.ativa { background-color: #ffcc00; box-shadow: 0 0 12px #ffcc00; }
-.luz.verde.ativa { background-color: #00cc00; box-shadow: 0 0 12px #00cc00; }
+// Quando ATIVO (não tem a classe 'apagado')
+.modulo-pedestre.vermelho:not(.apagado) { 
+  background-color: rgba(255, 0, 0, 0.1); // Fundo vermelho sutil
+  color: #ff0000; // Boneco fica vermelho
+}
+.modulo-pedestre.verde:not(.apagado) { 
+  background-color: rgba(0, 204, 0, 0.1); // Fundo verde sutil
+  color: #00cc00; // Boneco fica verde
+}
 
-// --- TEXTOS E BOTÃO HOME ---
+// Quando APAGADO
+.modulo-pedestre.apagado {
+  background-color: rgba(0, 0, 0, 0.05); // Fundo cinza bem clarinho
+  color: #e0e0e0; // Boneco fica cinza esmaecido
+}
+
+// --- TEXTOS E BOTÃO HOME (Mantidos do design anterior) ---
 .cartao-verde {
   background-color: #a3e635;
   border-radius: 20px;
@@ -74,7 +93,7 @@ ion-content {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  margin-top: 60px; // Adicionado para manter a distância do cartão de texto
+  margin-top: 60px;
 
   ion-icon {
     color: white;

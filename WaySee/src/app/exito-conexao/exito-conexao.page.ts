@@ -5,7 +5,6 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, Ion
 import { RouterModule, ActivatedRoute } from '@angular/router';
 
 import { addIcons } from 'ionicons';
-// Removido o arrowForwardOutline daqui
 import { home, locationOutline } from 'ionicons/icons';
 
 @Component({
@@ -17,18 +16,20 @@ import { home, locationOutline } from 'ionicons/icons';
 })
 export class ExitoConexaoPage implements OnInit {
   
+  // Variável que controla a tela (agora apenas 'vermelho' ou 'verde')
   corAtual: string = 'vermelho'; 
 
   constructor(private route: ActivatedRoute) {
-    // Removido o arrowForwardOutline daqui também
+    // Mantemos os ícones necessários para o cabeçalho e botão Home
     addIcons({ home, locationOutline });
   }
 
   ngOnInit() {
+    // Lê o parâmetro 'cor' que veio da tela de carregamento
     this.route.queryParams.subscribe(params => {
       if (params['cor']) {
         this.corAtual = params['cor'];
-        console.log('A cor recebida do semáforo foi:', this.corAtual);
+        console.log('A cor recebida do semáforo de pedestres foi:', this.corAtual);
       }
     });
   }

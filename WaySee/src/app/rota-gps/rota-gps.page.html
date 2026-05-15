@@ -14,8 +14,12 @@
 <ion-content [fullscreen]="true">
   <ion-item>
     <ion-input
-      placeholder="Digite o endereço"
+      class="texto"
+      placeholder="Insira o endereço"
+      labelPlacement="floating"
+      [clearInput]="true"
       [(ngModel)]="endereco">
+      <div slot="label">Endereço</div>
     </ion-input>
   </ion-item>
 

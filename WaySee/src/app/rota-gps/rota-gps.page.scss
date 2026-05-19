@@ -6,8 +6,18 @@
 ion-input.texto {
   --background: #A4EA4F;
   --color: #ffffff;
+  --border-radius: 20px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-bottom: 8px;
+  font-size: 18px;
 }
 
 ion-item {
   margin-top: 25px;
+  --background: transparent;
+  --border-color: transparent;
+  --inner-border-width: 0;
+ 
 }
+

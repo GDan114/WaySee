@@ -22,8 +22,18 @@
       [(ngModel)]="endereco">
     </ion-input>
   </ion-item>
-
-  <ion-button expand="full" (click)="abrirRota()">
-    Abrir rota Google-Maps
-  </ion-button>
+  <div class="button-column">
+    <ion-button (click)="abrirRota()" class="round-btn" fill="solid">
+      <div class="btn-content">
+          <ion-icon src="assets/icon/route.svg"></ion-icon>
+        <span>Abrir rota</span>
+      </div>
+    </ion-button>
+    <ion-button class="round-btn" fill="solid" [routerLink] = "['/home']">
+        <div class="btn-content">
+          <ion-icon src="assets/icon/home-icon.svg"></ion-icon>
+          <span>Home</span>
+        </div>
+      </ion-button>
+  </div>
 </ion-content>

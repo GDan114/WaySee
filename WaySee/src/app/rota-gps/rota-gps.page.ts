@@ -34,7 +34,12 @@ export class RotaGpsPage implements OnInit {
     const lat = pos.coords.latitude;
     const lng = pos.coords.longitude;
 
-    const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destino}`;
+    const url =
+      `https://www.google.com/maps/dir/?api=1` +
+      `&origin=${lat},${lng}` +
+      `&destination=${destino}` +
+      `&travelmode=walking` +
+      `&dir_action=navigate`;
 
     window.open(url, '_system');
 
@@ -42,7 +47,11 @@ export class RotaGpsPage implements OnInit {
     console.log('Erro ao pegar localização', err);
 
     // fallback (caso usuário negue permissão)
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${destino}`;
+    const url =
+      `https://www.google.com/maps/dir/?api=1` +
+      `&destination=${destino}` +
+      `&travelmode=walking` +
+      `&dir_action=navigate`;
     window.open(url, '_system');
   }
 }

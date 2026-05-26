@@ -12,9 +12,28 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">rota-gps</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-item>
+    <ion-input
+      class="texto"
+      label="Endereço"
+      labelPlacement="floating"
+      placeholder="Insira o endereço"
+      [clearInput]="true"
+      [(ngModel)]="endereco">
+    </ion-input>
+  </ion-item>
+  <div class="button-column">
+    <ion-button (click)="abrirRota()" class="round-btn" fill="solid">
+      <div class="btn-content">
+          <ion-icon src="assets/icon/route.svg"></ion-icon>
+        <span>Abrir rota</span>
+      </div>
+    </ion-button>
+    <ion-button class="round-btn" fill="solid" [routerLink] = "['/home']">
+        <div class="btn-content">
+          <ion-icon src="assets/icon/home-icon.svg"></ion-icon>
+          <span>Home</span>
+        </div>
+      </ion-button>
+  </div>
 </ion-content>

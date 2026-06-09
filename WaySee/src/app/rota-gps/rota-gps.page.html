@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="titulo">
+      WaySee
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/home']">
+        <img src="assets/icon/logo-waysee-clara.jpg" class="logo">
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item>
+    <ion-input
+      class="texto"
+      label="Endereço"
+      labelPlacement="floating"
+      placeholder="Insira o endereço"
+      [clearInput]="true"
+      [(ngModel)]="endereco">
+    </ion-input>
+  </ion-item>
+  <div class="button-column">
+    <ion-button (click)="abrirRota()" class="round-btn" fill="solid">
+      <div class="btn-content">
+          <ion-icon src="assets/icon/route.svg"></ion-icon>
+        <span>Abrir rota</span>
+      </div>
+    </ion-button>
+    <ion-button class="round-btn" fill="solid" [routerLink] = "['/home']">
+        <div class="btn-content">
+          <ion-icon src="assets/icon/home-icon.svg"></ion-icon>
+          <span>Home</span>
+        </div>
+      </ion-button>
+  </div>
+</ion-content>

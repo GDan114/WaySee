@@ -9,7 +9,8 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',
-  },  {
+  },
+  {
     path: 'conexao-semaforo',
     loadComponent: () => import('./conexao-semaforo/conexao-semaforo.page').then( m => m.ConexaoSemaforoPage)
   },
@@ -20,6 +21,10 @@ export const routes: Routes = [
   {
     path: 'exito-conexao',
     loadComponent: () => import('./exito-conexao/exito-conexao.page').then( m => m.ExitoConexaoPage)
+  },
+  {
+    path: 'rota-gps',
+    loadComponent: () => import('./rota-gps/rota-gps.page').then( m => m.RotaGpsPage)
   },
 
 ];

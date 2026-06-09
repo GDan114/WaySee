@@ -11,6 +11,18 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'conexao-semaforo',
+    loadComponent: () => import('./conexao-semaforo/conexao-semaforo.page').then( m => m.ConexaoSemaforoPage)
+  },
+  {
+    path: 'erro-conexao',
+    loadComponent: () => import('./erro-conexao/erro-conexao.page').then( m => m.ErroConexaoPage)
+  },
+  {
+    path: 'exito-conexao',
+    loadComponent: () => import('./exito-conexao/exito-conexao.page').then( m => m.ExitoConexaoPage)
+  },
+  {
     path: 'rota-gps',
     loadComponent: () => import('./rota-gps/rota-gps.page').then( m => m.RotaGpsPage)
   },

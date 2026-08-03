@@ -1,6 +1,10 @@
-.map {
-  height: 300px;
+@import "leaflet/dist/leaflet.css";
+#map {
   width: 100%;
+  height: 50vh;
+  display: block;
+  position: relative;
+  z-index: 1;
 }
 
 ion-input.texto {
@@ -50,4 +54,9 @@ ion-item {
 .btn-content span {
   font-size: 20px;
   font-family: 'Alatsi', 'Arial';
+}
+
+#map{
+  width:100%;
+  height:70vh;
 }

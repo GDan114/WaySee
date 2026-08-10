@@ -1,7 +1,19 @@
 @import "leaflet/dist/leaflet.css";
+.map-container {
+  width: calc(100% - 4vh);
+  height: 50vh;
+  margin: 0 2vh;
+
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
 #map {
   width: 100%;
-  height: 50vh;
+  height: 100%;
+
   display: block;
   position: relative;
   z-index: 1;
@@ -18,7 +30,6 @@ ion-input.texto {
 }
 
 ion-item {
-  margin-top: 25px;
   margin-bottom: 2vh;
   --background: transparent;
   --border-color: transparent;
@@ -59,4 +70,11 @@ ion-item {
 #map{
   width:100%;
   height:70vh;
+}
+
+.legenda {
+  padding-left: 2.2vh;
+  font-family: 'Arial';
+  color: #689F25;
+  font-size: 3.5vh;
 }

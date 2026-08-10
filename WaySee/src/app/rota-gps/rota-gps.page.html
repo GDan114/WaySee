@@ -12,6 +12,11 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <h2 class="legenda">Mapa</h2>
+  <div class="map-container">
+      <div id="map"></div>
+  </div>
+    <h2 class="legenda">Rota</h2>
   <ion-item>
     <ion-input
       class="texto"
@@ -22,7 +27,7 @@
       [(ngModel)]="endereco">
     </ion-input>
   </ion-item>
-  <div id="map"></div>
+  
   <div class="button-column">
     <ion-button (click)="abrirRota()" class="round-btn" fill="solid">
       <div class="btn-content">

@@ -1,10 +1,9 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, AfterViewInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon, IonInput, IonItem, IonList } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
-import { IonViewDidEnter } from '@ionic/angular';
 import * as L from 'leaflet';
 
 
@@ -17,7 +16,7 @@ import * as L from 'leaflet';
   imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon,  IonInput, IonItem, IonList, RouterModule, FormsModule],
 })
 
-export class RotaGpsPage implements OnInit {
+export class RotaGpsPage implements AfterViewInit {
   endereco: string = '';
   map!:L.Map;
 
@@ -27,7 +26,7 @@ export class RotaGpsPage implements OnInit {
       nome:'Semáforo',
       lat:-23.963702, 
       lng:-46.321562,
-      raio:20,
+      raio:10,
       notificado:false
     },
 
@@ -35,15 +34,18 @@ export class RotaGpsPage implements OnInit {
       nome:'Biblioteca',
       lat:-23.963985, 
       lng:-46.321562,
-      raio:15,
+      raio:10,
       notificado:false
     }
   ];
 
   constructor() { }
 
-  async ngOnInit() {
+  async ngAfterViewInit() {
     this.criarMapa();
+    setTimeout(() => {
+      this.map.invalidateSize();
+    }, 100);
     await this.mostrarLocalizacao();
   }
   // FUNÇÃO DA ROTA

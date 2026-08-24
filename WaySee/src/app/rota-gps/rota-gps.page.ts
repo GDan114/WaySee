@@ -6,8 +6,6 @@ import { RouterModule } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
 import * as L from 'leaflet';
 
-
-
 @Component({
   selector: 'app-rota-gps',
   templateUrl: './rota-gps.page.html',
@@ -93,9 +91,18 @@ export class RotaGpsPage implements AfterViewInit {
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     ).addTo(this.map);
 
+    const iconeSemaforo = L.icon({
+      iconUrl: 'assets/icons/maps-semaforo-icon.png',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+      popupAnchor: [0, -40]
+    });
+
     this.pontos.forEach(p=>{
 
-    L.marker([p.lat,p.lng])
+    L.marker([p.lat,p.lng], {
+      icon: iconeSemaforo
+    })
     .addTo(this.map)
     .bindPopup(p.nome);
 

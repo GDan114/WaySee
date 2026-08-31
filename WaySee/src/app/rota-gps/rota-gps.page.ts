@@ -92,7 +92,7 @@ export class RotaGpsPage implements AfterViewInit {
     ).addTo(this.map);
 
     const iconeSemaforo = L.icon({
-      iconUrl: 'assets/icons/maps-semaforo-icon.png',
+      iconUrl: 'assets/icon/maps-semaforo-icon1.png',
       iconSize: [40, 40],
       iconAnchor: [20, 40],
       popupAnchor: [0, -40]
@@ -109,7 +109,7 @@ export class RotaGpsPage implements AfterViewInit {
     L.circle([p.lat,p.lng],{
 
     radius:p.raio,
-    color:'blue'
+    color:'green'
 
     }).addTo(this.map);
 
@@ -123,7 +123,16 @@ export class RotaGpsPage implements AfterViewInit {
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
-      L.marker([lat, lng])
+      const iconeVoce = L.icon({
+      iconUrl: 'assets/icon/pin-icon.png',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+      popupAnchor: [0, -40]
+    });
+
+      L.marker([lat, lng], {
+        icon: iconeVoce
+      })
         .addTo(this.map)
         .bindPopup("Você")
         .openPopup();

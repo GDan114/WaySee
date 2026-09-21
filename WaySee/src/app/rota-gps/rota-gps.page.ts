@@ -21,7 +21,7 @@ export class RotaGpsPage implements AfterViewInit {
 
   pontos = [
     {
-      nome:'Semáforo',
+      nome:'Semáforo Teste',
       lat:-23.963702, 
       lng:-46.321562,
       raio:10,
@@ -29,12 +29,27 @@ export class RotaGpsPage implements AfterViewInit {
     },
 
     {
-      nome:'Biblioteca',
+      nome:'Semáforo',
       lat:-23.963985, 
       lng:-46.321562,
       raio:10,
       notificado:false
-    }
+    },
+
+    {
+      nome:'Semáforo Maquete',
+      lat:-23.930465,  
+      lng:-46.346641,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.932338,  
+      lng:-46.337571,
+      raio:10,
+      notificado:false
+    } // -23.934307, -46.330271
   ];
 
   constructor() { }

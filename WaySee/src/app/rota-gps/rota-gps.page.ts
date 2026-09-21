@@ -1,11 +1,10 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, AfterViewInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon, IonInput, IonItem, IonList } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
 import * as L from 'leaflet';
-
 
 @Component({
   selector: 'app-rota-gps',
@@ -15,44 +14,243 @@ import * as L from 'leaflet';
   imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon,  IonInput, IonItem, IonList, RouterModule, FormsModule],
 })
 
-export class RotaGpsPage implements OnInit {
+export class RotaGpsPage implements AfterViewInit {
   endereco: string = '';
+  map!:L.Map;
+
+
+  pontos = [
+    {
+      nome:'Semáforo Teste',
+      lat:-23.963702, 
+      lng:-46.321562,
+      raio:100,
+      notificado:false
+    },
+    {
+      nome:'Semáforo Maquete',
+      lat:-23.930465,  
+      lng:-46.346641,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.932338,  
+      lng:-46.337571,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.934307,  
+      lng:-46.330271,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.934348,  
+      lng:-46.335371,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.942476,  
+      lng:-46.334746,
+      raio:10,
+      notificado:false
+    },
+    {
+      nome:'Semáforo',
+      lat:-23.944593,  
+      lng:-46.325222,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.950806,  
+      lng:-46.323995,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.954689,  
+      lng:-46.322798,
+      raio:10,
+      notificado:false
+    },  
+    {
+      nome:'Semáforo',
+      lat:-23.957903,  
+      lng:-46.321635,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.937604,  
+      lng:-46.324689,
+      raio:10,
+      notificado:false
+    }
+  ];
 
   constructor() { }
 
-  ngOnInit() {
+  async ngAfterViewInit() {
+    this.criarMapa();
+    setTimeout(() => {
+      this.map.invalidateSize();
+    }, 100);
+    await this.mostrarLocalizacao();
   }
-
+  // FUNÇÃO DA ROTA
   async abrirRota() {
-  if (!this.endereco) return;
+    if (!this.endereco) return;
 
-  const destino = encodeURIComponent(this.endereco);
+    const destino = encodeURIComponent(this.endereco);
 
-  try {
-    const pos = await Geolocation.getCurrentPosition();
+    try {
+      const pos = await Geolocation.getCurrentPosition();
 
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
 
-    const url =
-      `https://www.google.com/maps/dir/?api=1` +
-      `&origin=${lat},${lng}` +
-      `&destination=${destino}` +
-      `&travelmode=walking` +
-      `&dir_action=navigate`;
+      const url =
+        `https://www.google.com/maps/dir/?api=1` +
+        `&origin=${lat},${lng}` +
+        `&destination=${destino}` +
+        `&travelmode=walking` +
+        `&dir_action=navigate`;
 
-    window.open(url, '_system');
+      window.open(url, '_system');
 
-  } catch (err) {
-    console.log('Erro ao pegar localização', err);
+    } catch (err) {
+      console.log('Erro ao pegar localização', err);
 
-    // fallback (caso usuário negue permissão)
-    const url =
-      `https://www.google.com/maps/dir/?api=1` +
-      `&destination=${destino}` +
-      `&travelmode=walking` +
-      `&dir_action=navigate`;
-    window.open(url, '_system');
+      // fallback (caso usuário negue permissão)
+      const url =
+        `https://www.google.com/maps/dir/?api=1` +
+        `&destination=${destino}` +
+        `&travelmode=walking` +
+        `&dir_action=navigate`;
+      window.open(url, '_system');
+    }
   }
-}
+  // FUNÇÃO DO MAPA
+  criarMapa(){
+
+    this.map=L.map('map').setView(
+    [-23.963702, -46.321562],
+    18
+    );
+
+    L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    ).addTo(this.map);
+
+    const iconeSemaforo = L.icon({
+      iconUrl: 'assets/icon/maps-semaforo-icon1.png',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+      popupAnchor: [0, -40]
+    });
+
+    this.pontos.forEach(p=>{
+
+    L.marker([p.lat,p.lng], {
+      icon: iconeSemaforo
+    })
+    .addTo(this.map)
+    .bindPopup(p.nome);
+
+    L.circle([p.lat,p.lng],{
+
+    radius:p.raio,
+    color:'green'
+
+    }).addTo(this.map);
+
+    });
+  }
+  // FUNÇÃO PARA MOSTRAR LOCALIZAÇÃO NO MAPA
+  async mostrarLocalizacao() {
+    try {
+      const pos = await Geolocation.getCurrentPosition();
+
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      const iconeVoce = L.icon({
+      iconUrl: 'assets/icon/pin-icon.png',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+      popupAnchor: [0, -40]
+    });
+
+      L.marker([lat, lng], {
+        icon: iconeVoce
+      })
+        .addTo(this.map)
+        .bindPopup("Você")
+        .openPopup();
+
+      this.map.setView([lat, lng], 18);
+
+      // ADICIONE ESTA LINHA
+      this.verificarPontos(lat, lng);
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  // FUNÇÃO PARA CALCULAR DISTÂNCIA
+  calcularDistancia(
+      lat1:number,
+      lon1:number,
+      lat2:number,
+      lon2:number
+    ){
+
+    const R=6371000;
+
+    const dLat=(lat2-lat1)*Math.PI/180;
+    const dLon=(lon2-lon1)*Math.PI/180;
+
+    const a=
+    Math.sin(dLat/2)**2+
+    Math.cos(lat1*Math.PI/180)*
+    Math.cos(lat2*Math.PI/180)*
+    Math.sin(dLon/2)**2;
+
+    const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+
+    return R*c;
+  }
+
+  //FUNÇÃO PARA VERIFICAR OS PONTOS PERSONALIZADOS
+  verificarPontos(lat:number,lng:number){
+    this.pontos.forEach(p=>{
+      const distancia=this.calcularDistancia(
+        lat,
+        lng,
+        p.lat,
+        p.lng
+      );
+
+      if(distancia<p.raio && !p.notificado){
+        alert("Você chegou em "+p.nome);
+        p.notificado=true;
+      }
+
+      if(distancia>p.raio){
+        p.notificado=false;
+      }
+    });
+
+  }
 }

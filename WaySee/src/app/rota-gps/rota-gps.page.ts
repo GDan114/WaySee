@@ -24,18 +24,9 @@ export class RotaGpsPage implements AfterViewInit {
       nome:'Semáforo Teste',
       lat:-23.963702, 
       lng:-46.321562,
-      raio:10,
+      raio:100,
       notificado:false
     },
-
-    {
-      nome:'Semáforo',
-      lat:-23.963985, 
-      lng:-46.321562,
-      raio:10,
-      notificado:false
-    },
-
     {
       nome:'Semáforo Maquete',
       lat:-23.930465,  
@@ -49,7 +40,63 @@ export class RotaGpsPage implements AfterViewInit {
       lng:-46.337571,
       raio:10,
       notificado:false
-    } // -23.934307, -46.330271
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.934307,  
+      lng:-46.330271,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.934348,  
+      lng:-46.335371,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.942476,  
+      lng:-46.334746,
+      raio:10,
+      notificado:false
+    },
+    {
+      nome:'Semáforo',
+      lat:-23.944593,  
+      lng:-46.325222,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.950806,  
+      lng:-46.323995,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.954689,  
+      lng:-46.322798,
+      raio:10,
+      notificado:false
+    },  
+    {
+      nome:'Semáforo',
+      lat:-23.957903,  
+      lng:-46.321635,
+      raio:10,
+      notificado:false
+    }, 
+    {
+      nome:'Semáforo',
+      lat:-23.937604,  
+      lng:-46.324689,
+      raio:10,
+      notificado:false
+    }
   ];
 
   constructor() { }

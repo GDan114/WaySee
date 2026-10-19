@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
 import * as L from 'leaflet';
 
+// npx cap sync
+
 @Component({
   selector: 'app-rota-gps',
   templateUrl: './rota-gps.page.html',

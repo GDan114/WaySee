@@ -1,9 +1,11 @@
-import { Component, OnInit, AfterViewInit} from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core'; // To mundando aqui
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon, IonInput, IonItem, IonList } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
+import { Haptics, ImpactStyle } from '@capacitor/haptics'
+import { LocalNotifications } from '@capacitor/local-notifications';
 import * as L from 'leaflet';
 
 // npx cap sync
@@ -19,7 +21,14 @@ import * as L from 'leaflet';
 export class RotaGpsPage implements AfterViewInit {
   endereco: string = '';
   map!:L.Map;
+  // Identificador do acompanhamento GPS
+  watchId: string | null = null;
 
+  // Marcador da localização do usuário
+  marcadorUsuario!: L.Marker;
+
+  // Controla a primeira localização
+  primeiraLocalizacao: boolean = true;
 
   pontos = [
     {
@@ -44,7 +53,14 @@ export class RotaGpsPage implements AfterViewInit {
       notificado:false
     }, 
     {
-      nome:'Semáforo',
+      nome:'Semáforo-CasaDanilo',
+      lat:-23.95452196387473,  
+      lng:-46.40357420933549,
+      raio:50,
+      notificado:false
+    },
+    {
+      nome:'Semáforo', 
       lat:-23.934307,  
       lng:-46.330271,
       raio:10,
@@ -102,14 +118,131 @@ export class RotaGpsPage implements AfterViewInit {
   ];
 
   constructor() { }
+  // Solicita permissão para notificações locais
+  async solicitarPermissaoNotificacao() {
+    const permissao = await LocalNotifications.requestPermissions();
+    if (permissao.display === 'granted') {
+      console.log('Permissão de notificação concedida!');
+    } else {
+      console.log('Permissão de notificação negada.');
+    }
+  }
 
   async ngAfterViewInit() {
     this.criarMapa();
+    await this.solicitarPermissaoNotificacao();
+    await this.criarCanalNotificacao();
     setTimeout(() => {
       this.map.invalidateSize();
     }, 100);
-    await this.mostrarLocalizacao();
+    await this.iniciarAcompanhamento();
   }
+
+  ngOnDestroy() {
+  if (this.watchId !== null) {
+    Geolocation.clearWatch({
+      id: this.watchId
+    });
+    this.watchId = null;
+  }
+  if (this.map) {
+    this.map.remove();
+  }
+}
+
+async criarCanalNotificacao() {
+  await LocalNotifications.createChannel({
+    id: 'waysee-alertas',
+    name: 'Alertas de semáforos',
+    description: 'Notificações de aproximação de semáforos',
+    importance: 5,
+    sound: 'notificacao.mp3',
+    vibration: true
+  });
+
+}
+
+// Mostrar noticação de semáforo próximo
+async notificarSemaforo(nome: string) {
+  try {
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          title: 'Atenção! 🚦',
+          body: `Há um semáforo próximo!`,
+          id: Math.floor(Date.now() % 2147483647),
+          channelId: 'waysee-alertas',
+          schedule: {
+            at: new Date(Date.now() + 500)
+          },
+          foreground: true
+        }
+      ]
+    });
+  } catch (e) {
+    console.log('Erro ao enviar notificação:', e);
+  }
+}
+
+  async iniciarAcompanhamento() {
+    try {
+      this.watchId = await Geolocation.watchPosition(
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        },
+        (pos, err) => {
+          if (err) {
+            console.log('Erro ao acompanhar localização:', err);
+            return;
+          }
+          if (!pos) return;
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          console.log('Latitude:', lat);
+          console.log('Longitude:', lng);
+          // Atualiza marcador no mapa
+          if (!this.marcadorUsuario) {
+            const iconeVoce = L.icon({
+              iconUrl: 'assets/icon/pin-icon.png',
+              iconSize: [40, 40],
+              iconAnchor: [20, 40],
+              popupAnchor: [0, -40]
+            });
+            this.marcadorUsuario = L.marker([lat, lng], {
+              icon: iconeVoce
+            })
+              .addTo(this.map)
+              .bindPopup("Você");
+          } else {
+            this.marcadorUsuario.setLatLng([lat, lng]);
+          }
+          // Centraliza o mapa apenas na primeira localização
+          if (this.primeiraLocalizacao) {
+            this.map.setView([lat, lng], 18);
+            this.primeiraLocalizacao = false;
+          }
+          // Verifica proximidade dos semáforos
+          this.verificarPontos(lat, lng);
+        }
+      );
+    } catch (e) {
+      console.log('Não foi possível iniciar o GPS:', e);
+    }
+  }
+
+  // função de vibrar
+ async vibrar() {
+    try {
+      await Haptics.vibrate({
+        duration: 1500
+      });
+    } catch (e) {
+      console.log('Erro ao vibrar:', e);
+    }
+  }
+
   // FUNÇÃO DA ROTA
   async abrirRota() {
     if (!this.endereco) return;
@@ -145,67 +278,52 @@ export class RotaGpsPage implements AfterViewInit {
   }
   // FUNÇÃO DO MAPA
   criarMapa(){
-
     this.map=L.map('map').setView(
     [-23.963702, -46.321562],
     18
     );
-
     L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     ).addTo(this.map);
-
     const iconeSemaforo = L.icon({
       iconUrl: 'assets/icon/maps-semaforo-icon1.png',
       iconSize: [40, 40],
       iconAnchor: [20, 40],
       popupAnchor: [0, -40]
     });
-
     this.pontos.forEach(p=>{
-
     L.marker([p.lat,p.lng], {
       icon: iconeSemaforo
     })
     .addTo(this.map)
     .bindPopup(p.nome);
-
     L.circle([p.lat,p.lng],{
-
     radius:p.raio,
     color:'green'
-
     }).addTo(this.map);
-
     });
   }
   // FUNÇÃO PARA MOSTRAR LOCALIZAÇÃO NO MAPA
   async mostrarLocalizacao() {
     try {
       const pos = await Geolocation.getCurrentPosition();
-
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
-
       const iconeVoce = L.icon({
       iconUrl: 'assets/icon/pin-icon.png',
       iconSize: [40, 40],
       iconAnchor: [20, 40],
       popupAnchor: [0, -40]
     });
-
       L.marker([lat, lng], {
         icon: iconeVoce
       })
         .addTo(this.map)
         .bindPopup("Você")
         .openPopup();
-
       this.map.setView([lat, lng], 18);
-
       // ADICIONE ESTA LINHA
       this.verificarPontos(lat, lng);
-
     } catch (e) {
       console.log(e);
     }
@@ -217,42 +335,37 @@ export class RotaGpsPage implements AfterViewInit {
       lat2:number,
       lon2:number
     ){
-
     const R=6371000;
-
     const dLat=(lat2-lat1)*Math.PI/180;
     const dLon=(lon2-lon1)*Math.PI/180;
-
     const a=
     Math.sin(dLat/2)**2+
     Math.cos(lat1*Math.PI/180)*
     Math.cos(lat2*Math.PI/180)*
     Math.sin(dLon/2)**2;
-
     const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-
     return R*c;
   }
-
-  //FUNÇÃO PARA VERIFICAR OS PONTOS PERSONALIZADOS
-  verificarPontos(lat:number,lng:number){
-    this.pontos.forEach(p=>{
-      const distancia=this.calcularDistancia(
+    //FUNÇÃO PARA VERIFICAR OS PONTOS PERSONALIZADOS
+    verificarPontos(lat: number, lng: number) {
+    this.pontos.forEach(p => {
+      const distancia = this.calcularDistancia(
         lat,
         lng,
         p.lat,
         p.lng
       );
-
-      if(distancia<p.raio && !p.notificado){
-        alert("Você chegou em "+p.nome);
-        p.notificado=true;
+      if (distancia < p.raio && !p.notificado) {
+        console.log('Semáforo próximo:', p.nome);
+        // Marca como notificado antes de vibrar
+        p.notificado = true;
+        // alert("Semáforo próximo");
+        this.vibrar();
+        this.notificarSemaforo(p.nome);
       }
-
-      if(distancia>p.raio){
-        p.notificado=false;
+      if (distancia > p.raio) {
+        p.notificado = false;
       }
     });
-
   }
 }

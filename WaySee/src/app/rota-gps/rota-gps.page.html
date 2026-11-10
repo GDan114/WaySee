@@ -1,22 +1,43 @@
+
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title class="titulo">
       WaySee
     </ion-title>
+
     <ion-buttons slot="end">
-      <ion-button [routerLink]="['/home']">
-        <img src="assets/icon/logo-waysee-clara.jpg" class="logo">
+      <ion-button
+        [routerLink]="['/home']"
+        aria-label="Voltar para a página inicial">
+
+        <img
+          src="assets/icon/logo-waysee-clara.jpg"
+          class="logo"
+          alt=""
+          role="presentation">
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <h2 class="legenda">Mapa</h2>
-  <div class="map-container">
-      <div id="map"></div>
+
+  <h2 class="legenda" id="titulo-mapa">
+    Mapa
+  </h2>
+
+  <div
+    class="map-container"
+    role="region"
+    aria-label="Mapa de localização do WaySee">
+
+    <div id="map"></div>
   </div>
-    <h2 class="legenda">Rota</h2>
+
+  <h2 class="legenda" id="titulo-rota">
+    Rota
+  </h2>
+
   <ion-item>
     <ion-input
       class="texto"
@@ -24,22 +45,47 @@
       labelPlacement="floating"
       placeholder="Insira o endereço"
       [clearInput]="true"
-      [(ngModel)]="endereco">
+      [(ngModel)]="endereco"
+      aria-describedby="ajuda-endereco">
     </ion-input>
   </ion-item>
-  
+
+  <ion-note id="ajuda-endereco">
+    Digite o endereço para o qual deseja traçar uma rota.
+  </ion-note>
+
   <div class="button-column">
-    <ion-button (click)="abrirRota()" class="round-btn" fill="solid">
+
+    <ion-button
+      (click)="abrirRota()"
+      class="round-btn"
+      fill="solid"
+      aria-label="Abrir rota para o endereço informado">
+
       <div class="btn-content">
-          <ion-icon src="assets/icon/route.svg"></ion-icon>
+        <ion-icon
+          src="assets/icon/route.svg"
+          aria-hidden="true">
+        </ion-icon>
         <span>Abrir rota</span>
       </div>
     </ion-button>
-    <ion-button class="round-btn" fill="solid" [routerLink] = "['/home']">
-        <div class="btn-content">
-          <ion-icon src="assets/icon/home-icon.svg"></ion-icon>
-          <span>Home</span>
-        </div>
-      </ion-button>
+
+    <ion-button
+      class="round-btn"
+      fill="solid"
+      [routerLink]="['/home']"
+      aria-label="Voltar para a página inicial">
+
+      <div class="btn-content">
+        <ion-icon
+          src="assets/icon/home-icon.svg"
+          aria-hidden="true">
+        </ion-icon>
+        <span>Home</span>
+      </div>
+    </ion-button>
+
   </div>
+
 </ion-content>

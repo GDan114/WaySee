@@ -32,8 +32,11 @@
       </div>
     </div>
 
-    <div class="cartao-verde">
-      <p *ngIf="corAtual === 'vermelho'">Sinal vermelho,<br>não prossiga!</p>
+    <div class="cartao-verde"
+      role="status"
+      aria-live="assertive"
+      aria-atomic="true">
+      <p *ngIf="corAtual === 'vermelho'">Sinal vermelho,<br>não atravesse!</p>
       <p *ngIf="corAtual === 'verde'">Sinal verde, prossiga<br>com cautela!</p>
     </div>
 

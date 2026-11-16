@@ -34,7 +34,7 @@ export class ConexaoSemaforoPage implements OnInit {
         // Verifica se o JSON tem o status "conectado" que o ESP32 enviou
         if (resposta.status === 'conectado') {
           console.log('Semáforo encontrado! Cor enviada:', resposta.cor);
-          
+
           // Vai para a tela de êxito levando a cor como "bagagem" (query param)
           this.router.navigate(['/exito-conexao'], { 
             queryParams: { cor: resposta.cor } 

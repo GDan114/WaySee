@@ -16,13 +16,22 @@ import { homeOutline } from 'ionicons/icons';
   imports: [CommonModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon, RouterModule]
 })
 export class ErroConexaoPage implements OnInit {
-
+  
   constructor() {
     // Registra o ícone da casinha para poder ser usado no HTML
     addIcons({ homeOutline });
   }
 
   ngOnInit() {
+    this.reproduzirAudioErro()
+  }
+
+  reproduzirAudioErro() {
+  const audio = new Audio('assets/audio/erro.mp3');
+
+  audio.play().catch(erro => {
+      console.error('Erro ao reproduzir áudio:', erro);
+    });
   }
 
 }

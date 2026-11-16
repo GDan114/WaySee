@@ -152,11 +152,11 @@ export class RotaGpsPage implements AfterViewInit {
 
 async criarCanalNotificacao() {
   await LocalNotifications.createChannel({
-    id: 'waysee-alertas',
+    id: 'waysee-alertas2',
     name: 'Alertas de semáforos',
     description: 'Notificações de aproximação de semáforos',
     importance: 5,
-    sound: 'notificacao.mp3',
+    sound: 'semaforo',
     vibration: true
   });
 
@@ -171,7 +171,7 @@ async notificarSemaforo(nome: string) {
           title: 'Atenção! 🚦',
           body: `Há um semáforo próximo!`,
           id: Math.floor(Date.now() % 2147483647),
-          channelId: 'waysee-alertas',
+          channelId: 'waysee-alertas2',
           schedule: {
             at: new Date(Date.now() + 500)
           },

@@ -7,8 +7,13 @@ import { Geolocation } from '@capacitor/geolocation';
 import { Haptics, ImpactStyle } from '@capacitor/haptics'
 import { LocalNotifications } from '@capacitor/local-notifications';
 import * as L from 'leaflet';
+// semáforo em tempo real
+import { HttpClient } from '@angular/common/http';
+import { timer, EMPTY, Subscription } from 'rxjs';
+import { exhaustMap, catchError } from 'rxjs/operators';
 
 // npx cap sync
+// npx cap open android
 
 @Component({
   selector: 'app-rota-gps',
@@ -19,6 +24,24 @@ import * as L from 'leaflet';
 })
 
 export class RotaGpsPage implements AfterViewInit {
+  // implementação do semáforo em tempo real
+    // Comunicação com o ESP32
+  private urlDoEsp = 'http://192.168.4.1/status';
+
+  // Controle do monitoramento
+  private monitoramentoSemaforo?: Subscription;
+
+  // Guarda a última cor recebida
+  private corAtual: string = '';
+
+  // Controle do áudio
+  private audioAtual: HTMLAudioElement | null = null;
+
+  // ID fixo para atualizar a mesma notificação
+  private idNotificacao = 1001;
+
+  // fim
+
   endereco: string = '';
   map!:L.Map;
   // Identificador do acompanhamento GPS
@@ -116,8 +139,149 @@ export class RotaGpsPage implements AfterViewInit {
       notificado:false
     }
   ];
+  // Funções conexão do semáforo
 
-  constructor() { }
+  async reproduzirAudio(cor: string) {
+    try {
+
+      // Interrompe o áudio anterior
+      if (this.audioAtual) {
+        this.audioAtual.pause();
+        this.audioAtual.currentTime = 0;
+      }
+
+      let arquivo = '';
+
+      if (cor === 'vermelho') {
+        arquivo = 'assets/audio/pare.mp3';
+      } 
+      else if (cor === 'verde') {
+        arquivo = 'assets/audio/prossiga.mp3';
+      }
+
+      if (!arquivo) return;
+
+      this.audioAtual = new Audio(arquivo);
+
+      await this.audioAtual.play();
+
+    } catch (erro) {
+      console.error('Erro ao reproduzir áudio:', erro);
+    }
+  }
+
+  async vibrarSemaforo() {
+  try {
+
+    if (this.corAtual === 'vermelho') {
+
+      await Haptics.vibrate({
+        duration: 2000
+      });
+
+    } 
+    else if (this.corAtual === 'verde') {
+
+      await Haptics.vibrate({
+        duration: 600
+      });
+
+      await new Promise(resolve => setTimeout(resolve, 400));
+
+      await Haptics.vibrate({
+        duration: 600
+      });
+
+    }
+
+  } catch (erro) {
+    console.error('Erro ao vibrar:', erro);
+  }
+}
+
+async notificarEstadoSemaforo(cor: string) {
+
+  let mensagem = '';
+
+  if (cor === 'vermelho') {
+    mensagem = 'Sinal vermelho para pedestres. Pare!';
+  } 
+  else if (cor === 'verde') {
+    mensagem = 'Sinal verde para pedestres. Prossiga!';
+  }
+
+  try {
+
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          title: 'WaySee - Estado do semáforo 🚦',
+          body: mensagem,
+          id: this.idNotificacao,
+          channelId: 'waysee-alertas3',
+          schedule: {
+            at: new Date(Date.now() + 500)
+          },
+          foreground: true,
+          silent: true
+        }
+      ]
+    });
+
+  } catch (erro) {
+    console.error('Erro ao atualizar notificação:', erro);
+  }
+
+}
+
+  iniciarMonitoramentoSemaforo() {
+    // Consulta imediatamente e depois a cada 1 segundo
+    this.monitoramentoSemaforo = timer(0, 1000).pipe(
+
+      exhaustMap(() =>
+        this.http.get<any>(this.urlDoEsp).pipe(
+
+          catchError(erro => {
+            console.log('Erro ao consultar semáforo:', erro);
+            return EMPTY;
+          })
+
+        )
+      )
+
+    ).subscribe(resposta => {
+
+      if (resposta.status !== 'conectado') {
+        return;
+      }
+
+      const novaCor = resposta.cor?.toLowerCase();
+
+      // Aceita somente vermelho e verde
+      if (novaCor !== 'vermelho' && novaCor !== 'verde') {
+        return;
+      }
+
+      // Evita repetir alertas quando a cor não mudou
+      if (this.corAtual === novaCor) {
+        return;
+      }
+
+      this.corAtual = novaCor;
+
+      console.log('Estado atualizado:', this.corAtual);
+
+      // Executa os recursos de acessibilidade
+      this.vibrarSemaforo();
+      this.reproduzirAudio(this.corAtual);
+
+      // Atualiza a notificação
+      this.notificarEstadoSemaforo(this.corAtual);
+    });
+  }
+
+  // Fim
+  constructor(private http: HttpClient) { }
   // Solicita permissão para notificações locais
   async solicitarPermissaoNotificacao() {
     const permissao = await LocalNotifications.requestPermissions();
@@ -130,11 +294,18 @@ export class RotaGpsPage implements AfterViewInit {
 
   async ngAfterViewInit() {
     this.criarMapa();
+
     await this.solicitarPermissaoNotificacao();
     await this.criarCanalNotificacao();
+
+    // Começa a monitorar o estado do semáforo
+    this.iniciarMonitoramentoSemaforo();
+
     setTimeout(() => {
       this.map.invalidateSize();
     }, 100);
+
+    // Mantém o acompanhamento GPS
     await this.iniciarAcompanhamento();
   }
 
@@ -232,7 +403,7 @@ async notificarSemaforo(nome: string) {
     }
   }
 
-  // função de vibrar
+  /*// função de vibrar
  async vibrar() {
     try {
       await Haptics.vibrate({
@@ -241,7 +412,7 @@ async notificarSemaforo(nome: string) {
     } catch (e) {
       console.log('Erro ao vibrar:', e);
     }
-  }
+  }*/
 
   // FUNÇÃO DA ROTA
   async abrirRota() {
@@ -360,8 +531,6 @@ async notificarSemaforo(nome: string) {
         // Marca como notificado antes de vibrar
         p.notificado = true;
         // alert("Semáforo próximo");
-        this.vibrar();
-        this.notificarSemaforo(p.nome);
       }
       if (distancia > p.raio) {
         p.notificado = false;
